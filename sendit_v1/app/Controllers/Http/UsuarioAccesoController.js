@@ -1,47 +1,41 @@
 'use strict'
 
-const { authenticator } = require('../../../config/auth');
-
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
+const UsuarioAcceso = use ('App/Models/UsuarioAcceso');
 
-const Usuario = use('App/Models/Usuario');
 
 /**
- * Resourceful controller for interacting with usuarios
+ * Resourceful controller for interacting with usuarioaccesos
  */
-class UsuarioController {
+class UsuarioAccesoController {
+
+  async login ({request, auth}){
+    const {email, contrasena} = request.all();
+    const token = await auth.attempt(email, contrasena);
+    return token;
+  }
+
+
+
+
   /**
-   * Show a list of all usuarios.
-   * GET usuarios
+   * Show a list of all usuarioaccesos.
+   * GET usuarioaccesos
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-
-
-  async getUsuarios (){
-    const usuarios = await Usuario.query().fetch()
-    //return {hola:'Mundo'};
-    return usuarios;
-  }
-
-  async index ({ auth }) {
-    const usuario = await auth.getUser();
-    console.log(usuario);
-    return {
-      mensaje: "Hola Mundo"
-    }
-
+  async index ({ request, response, view }) {
   }
 
   /**
-   * Render a form to be used for creating a new usuario.
-   * GET usuarios/create
+   * Render a form to be used for creating a new usuarioacceso.
+   * GET usuarioaccesos/create
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -52,19 +46,31 @@ class UsuarioController {
   }
 
   /**
-   * Create/save a new usuario.
-   * POST usuarios
+   * Create/save a new usuarioacceso.
+   * POST usuarioaccesos
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store ({ request }) {
+    const {id_usuario, email, contrasena, id_departamento, id_cargo, id_estado_acceso} = request.all();
+    console.log(request.all());
+    const user = await UsuarioAcceso.create({
+      id_usuario,
+      email,
+      contrasena,
+      id_departamento,
+      id_cargo,
+      id_estado_acceso
+    });
+
+    return user;
   }
 
   /**
-   * Display a single usuario.
-   * GET usuarios/:id
+   * Display a single usuarioacceso.
+   * GET usuarioaccesos/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -75,8 +81,8 @@ class UsuarioController {
   }
 
   /**
-   * Render a form to update an existing usuario.
-   * GET usuarios/:id/edit
+   * Render a form to update an existing usuarioacceso.
+   * GET usuarioaccesos/:id/edit
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -87,8 +93,8 @@ class UsuarioController {
   }
 
   /**
-   * Update usuario details.
-   * PUT or PATCH usuarios/:id
+   * Update usuarioacceso details.
+   * PUT or PATCH usuarioaccesos/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -98,8 +104,8 @@ class UsuarioController {
   }
 
   /**
-   * Delete a usuario with id.
-   * DELETE usuarios/:id
+   * Delete a usuarioacceso with id.
+   * DELETE usuarioaccesos/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -109,4 +115,4 @@ class UsuarioController {
   }
 }
 
-module.exports = UsuarioController
+module.exports = UsuarioAccesoController

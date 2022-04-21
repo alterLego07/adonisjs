@@ -23,3 +23,6 @@ Route.get('/', () => {
 
 
 Route.get('usuarios', 'UsuarioController.getUsuarios');
+Route.get('index', 'UsuarioController.index').middleware('auth');
+Route.post('usuarios/new', 'UsuarioAccesoController.store');
+Route.post('usuarios/login', 'UsuarioAccesoController.login');
